@@ -7,7 +7,7 @@ fn main() {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input).unwrap();
     let (mut inputs1, mut inputs2): (Vec<u64>, Vec<u64>) = input
-        .split("\n")
+        .lines()
         .filter(|line| !line.is_empty())
         .map(|line| {
             let mut ints = line.split_whitespace().map(|it| it.parse::<u64>().unwrap());
