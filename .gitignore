@@ -1,5 +1,4 @@
 **/Cargo.lock
 **/target
 **/input.txt
-**/test.txt
-**/test2.txt
+**/test*.txt
