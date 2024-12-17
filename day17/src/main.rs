@@ -111,6 +111,26 @@ fn main() {
             .join(",")
     );
 
-    // There is no way to solve part 2 correctly.
-    // The solution wanted by AOC is to analyze the input by hand and basically brute force numbers in 3 bit parts from the right to left.
+    fn dfs(a: i64, depth: u32, state: VmState, insn_data: &Vec<u8>) -> Option<i64> {
+        if depth as usize >= insn_data.len() {
+            return Some(a);
+        }
+        for i in 0..7 {
+            let mut s = state.clone();
+            let value = (a << 3) | i;
+            s.reg_a = value;
+
+            let output = start_vm(s, insn_data);
+
+            if output.first() == insn_data.get(insn_data.len() - 1 - depth as usize) {
+                let opt = dfs(value, depth + 1, state.clone(), insn_data);
+                if let Some(opt) = opt {
+                    return Some(opt);
+                }
+            }
+        }
+        None
+    }
+
+    println!("Part 2: {}", dfs(0, 0, state, &insn_data).unwrap());
 }
