@@ -1,6 +1,6 @@
 use std::{
     io::{self, Read},
-    ops::{BitOr, BitXor, Shl, Shr},
+    ops::BitXor,
 };
 
 #[derive(Debug, Default, Clone)]
@@ -22,7 +22,7 @@ fn as_combo(state: &VmState, operand: u8) -> i64 {
     }
 }
 
-fn start_vm(mut state: VmState, insn_data: &Vec<u8>) -> Vec<u8> {
+fn start_vm(mut state: VmState, insn_data: &[u8]) -> Vec<u8> {
     let mut output = Vec::new();
     'next_insn: while state.ip < insn_data.len() {
         let opcode = *insn_data.get(state.ip).unwrap();
@@ -115,7 +115,7 @@ fn main() {
         if depth as usize >= insn_data.len() {
             return Some(a);
         }
-        for i in 0..7 {
+        for i in 0..=7 {
             let mut s = state.clone();
             let value = (a << 3) | i;
             s.reg_a = value;
