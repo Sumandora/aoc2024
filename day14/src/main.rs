@@ -66,8 +66,8 @@ fn main() {
         .map(|line| {
             let nums = numbers(line);
             Robot {
-                pos: (nums.get(0).unwrap().clone(), nums.get(1).unwrap().clone()),
-                velocity: (nums.get(2).unwrap().clone(), nums.get(3).unwrap().clone()),
+                pos: (*nums.first().unwrap(), *nums.get(1).unwrap()),
+                velocity: (*nums.get(2).unwrap(), *nums.get(3).unwrap()),
             }
         })
         .collect::<Vec<_>>();

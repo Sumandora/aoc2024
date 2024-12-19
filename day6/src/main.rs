@@ -15,7 +15,7 @@ enum Direction {
     Left,
 }
 impl Direction {
-    fn to_vec(&self) -> (i32, i32) {
+    fn to_vec(self) -> (i32, i32) {
         match self {
             Direction::Up => (0, -1),
             Direction::Right => (1, 0),
@@ -24,7 +24,7 @@ impl Direction {
         }
     }
 
-    fn rotate(&self) -> Direction {
+    fn rotated(self) -> Direction {
         match self {
             Direction::Up => Direction::Right,
             Direction::Right => Direction::Down,
@@ -47,7 +47,7 @@ enum SimulationError {
 
 impl Simulation {
     fn simulate(mut self) -> Result<Vec<Vec<GridType>>, SimulationError> {
-        let width = self.grid.iter().nth(0).unwrap().len();
+        let width = self.grid.first().unwrap().len();
         let height = self.grid.len();
 
         loop {
@@ -87,12 +87,12 @@ impl Simulation {
                     self.guard_pos = new_guard_pos;
                 }
                 GridType::Blocked => {
-                    self.guard_rotation = self.guard_rotation.rotate();
+                    self.guard_rotation = self.guard_rotation.rotated();
                 }
             }
         }
 
-        return Ok(self.grid);
+        Ok(self.grid)
     }
 }
 
@@ -167,7 +167,7 @@ fn main() {
                         guard_rotation: Direction::Up,
                         guard_pos,
                     };
-                    return new_simulation.simulate().is_err();
+                    new_simulation.simulate().is_err()
                 })
                 .count()
         })

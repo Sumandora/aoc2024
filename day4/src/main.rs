@@ -12,11 +12,8 @@ const DIRECTIONS: [[i32; 2]; 8] = [
     [1, -1],
 ];
 
-fn char_at(lines: &Vec<&str>, x: usize, y: usize) -> char {
-    return lines.iter().nth(y).unwrap().chars().nth(x).unwrap();
-}
-
-fn part1(lines: &Vec<&str>, x: usize, y: usize) -> u64 {
+#[allow(clippy::ptr_arg)]
+fn part1(lines: &Vec<Vec<char>>, x: usize, y: usize) -> u64 {
     let grid_x = lines.first().unwrap().len() as i32;
     let grid_y = lines.len() as i32;
 
@@ -38,7 +35,7 @@ fn part1(lines: &Vec<&str>, x: usize, y: usize) -> u64 {
                 break;
             }
 
-            let char = char_at(lines, y_pos as usize, x_pos as usize);
+            let char = lines[y_pos as usize][x_pos as usize];
 
             if char != c {
                 matches = false;
@@ -49,7 +46,7 @@ fn part1(lines: &Vec<&str>, x: usize, y: usize) -> u64 {
             sum += 1;
         }
     }
-    return sum;
+    sum
 }
 
 // I guess you could rotate it programmatically, but its only 3x3 and I value my time (to some extend that may be)
@@ -76,28 +73,26 @@ const XMAS_SHAPE: [[[Option<char>; 3]; 3]; 4] = [
     ],
 ];
 
-fn char_at_shape(lines: &[[Option<char>; 3]; 3], x: usize, y: usize) -> &Option<char> {
-    return lines.iter().nth(y).unwrap().iter().nth(x).unwrap();
-}
-
 const SHAPE_WIDTH: usize = 3;
 const SHAPE_HEIGHT: usize = 3;
 
-fn part2(lines: &Vec<&str>, x: usize, y: usize) -> bool {
-    let grid_x = lines.first().unwrap().len() as i32;
-    let grid_y = lines.len() as i32;
+#[allow(clippy::ptr_arg)]
+fn part2(lines: &Vec<Vec<char>>, x: usize, y: usize) -> bool {
+    let grid_width = lines.first().unwrap().len() as i32;
+    let grid_height = lines.len() as i32;
 
-    if x > (grid_x - SHAPE_WIDTH as i32) as usize || y > (grid_y - SHAPE_HEIGHT as i32) as usize {
+    if x > (grid_width - SHAPE_WIDTH as i32) as usize
+        || y > (grid_height - SHAPE_HEIGHT as i32) as usize
+    {
         return false;
     }
 
     for shape in XMAS_SHAPE {
         let mut matches = true;
-        for shape_x in 0..SHAPE_WIDTH {
-            for shape_y in 0..SHAPE_HEIGHT {
-                let shape_char = char_at_shape(&shape, shape_x, shape_y);
+        for (shape_y, shape_line) in shape.iter().enumerate() {
+            for (shape_x, shape_char) in shape_line.iter().enumerate() {
                 if let Some(c) = shape_char {
-                    let char = char_at(&lines, x as usize + shape_x, y as usize + shape_y);
+                    let char = lines[x + shape_x][y + shape_y];
                     if char != *c {
                         matches = false;
                         break;
@@ -110,20 +105,23 @@ fn part2(lines: &Vec<&str>, x: usize, y: usize) -> bool {
             return true;
         }
     }
-    return false;
+    false
 }
 
 fn main() {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input).unwrap();
 
-    let lines = input.lines().collect::<Vec<&str>>();
+    let lines = input
+        .lines()
+        .map(|line| line.chars().collect::<Vec<_>>())
+        .collect::<Vec<_>>();
 
     let mut part1_count: u64 = 0;
     let mut part2_count: u64 = 0;
 
     lines.iter().enumerate().for_each(|(y, line)| {
-        line.chars().enumerate().for_each(|(x, _)| {
+        line.iter().enumerate().for_each(|(x, _)| {
             part1_count += part1(&lines, x, y);
             if part2(&lines, x, y) {
                 part2_count += 1;

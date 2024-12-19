@@ -6,7 +6,7 @@ where
 {
     let mut last_diff = 0i64;
     let mut last_num = *levels.next().unwrap();
-    return levels.all(|num| {
+    levels.all(|num| {
         let diff = last_num - *num;
         if diff == 0 || diff.abs() > 3 {
             return false;
@@ -18,8 +18,8 @@ where
 
         last_diff = diff;
         last_num = *num;
-        return true;
-    });
+        true
+    })
 }
 
 fn main() {

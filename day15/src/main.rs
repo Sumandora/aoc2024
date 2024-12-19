@@ -53,6 +53,7 @@ impl MoveInst {
     }
 }
 
+#[allow(clippy::ptr_arg)]
 fn find_guard(map: &Vec<Vec<Cell>>) -> (i32, i32) {
     for (y, line) in map.iter().enumerate() {
         for (x, c) in line.iter().enumerate() {
@@ -144,7 +145,7 @@ fn part2(map: Vec<Vec<Cell>>, rules: &Vec<MoveInst>) -> Vec<Vec<Cell>> {
                 let cell = map[move_goal.1 as usize][move_goal.0 as usize].clone();
                 if cell.is_box() && !boxes.contains(&move_goal) {
                     let counterpart = cell.find_counterpart(move_goal);
-                    boxes.push(move_goal.clone());
+                    boxes.push(move_goal);
                     return move_double_box(map, boxes, (move_goal.0, move_goal.1 + dir.1), dir)
                         && move_double_box(map, boxes, counterpart, dir);
                 } else if matches!(cell, Cell::Wall) {
@@ -181,6 +182,7 @@ fn part2(map: Vec<Vec<Cell>>, rules: &Vec<MoveInst>) -> Vec<Vec<Cell>> {
     map
 }
 
+#[allow(clippy::ptr_arg)]
 fn sum_of_gps(map: &Vec<Vec<Cell>>) -> u64 {
     map.iter()
         .enumerate()
@@ -204,7 +206,6 @@ fn main() {
 
     let map = map
         .lines()
-        .into_iter()
         .map(|line| {
             line.chars()
                 .map(|c| match c {

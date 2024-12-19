@@ -52,9 +52,9 @@ fn main() {
             let prize = numbers(lines.next().unwrap());
 
             Machine {
-                button_a: (*button_a.get(0).unwrap(), *button_a.get(1).unwrap()),
-                button_b: (*button_b.get(0).unwrap(), *button_b.get(1).unwrap()),
-                prize: (*prize.get(0).unwrap(), *prize.get(1).unwrap()),
+                button_a: (*button_a.first().unwrap(), *button_a.last().unwrap()),
+                button_b: (*button_b.first().unwrap(), *button_b.last().unwrap()),
+                prize: (*prize.first().unwrap(), *prize.last().unwrap()),
             }
         })
         .collect::<Vec<_>>();
@@ -62,7 +62,7 @@ fn main() {
     let part1 = machines
         .iter()
         .map(|machine| {
-            let (c_0, c_1) = solve(&machine);
+            let (c_0, c_1) = solve(machine);
 
             if c_0 % 1.0 != 0.0 || c_1 % 1.0 != 0.0 {
                 return 0;
@@ -75,7 +75,7 @@ fn main() {
                 return 0;
             }
 
-            return c_0 * 3 + c_1 * 1;
+            c_0 * 3 + c_1
         })
         .sum::<u64>();
 
@@ -94,7 +94,7 @@ fn main() {
             let c_0 = c_0 as u64;
             let c_1 = c_1 as u64;
 
-            return c_0 * 3 + c_1 * 1;
+            c_0 * 3 + c_1
         })
         .sum::<u64>();
 

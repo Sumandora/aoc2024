@@ -53,7 +53,7 @@ fn main() {
     fn find_path(
         start: &(isize, isize),
         end: &(isize, isize),
-        grid: &Vec<Vec<GridCell>>,
+        #[allow(clippy::ptr_arg)] grid: &Vec<Vec<GridCell>>,
     ) -> Option<(Vec<(isize, isize)>, isize)> {
         astar::astar(
             start,

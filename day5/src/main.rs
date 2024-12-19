@@ -46,7 +46,7 @@ fn main() {
 
             passed.push(update);
         }
-        return true;
+        true
     });
 
     let wrong_order = wrong_order
@@ -59,7 +59,7 @@ fn main() {
             for update in updates {
                 let mut index = new_updates.len();
                 get_rules_for(*update).into_iter().for_each(|rule| {
-                    if new_updates.contains(&rule) {
+                    if new_updates.contains(rule) {
                         let new_index = new_updates.iter().position(|val| val == rule).unwrap();
                         if index > new_index {
                             index = new_index;
@@ -74,7 +74,7 @@ fn main() {
 
     fn sum_middles(vec: Vec<Vec<u64>>) -> u64 {
         vec.iter()
-            .map(|updates| *updates.iter().nth(updates.len() / 2).unwrap())
+            .map(|updates| *updates.get(updates.len() / 2).unwrap())
             .sum::<u64>()
     }
 

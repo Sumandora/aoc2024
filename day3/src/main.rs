@@ -16,7 +16,7 @@ fn main() {
         if captures[0].starts_with("mul") {
             let num1 = &captures[2];
             let num2 = &captures[3];
-            if num1.len() > 0 && num1.len() <= 3 && num2.len() > 0 && num2.len() <= 3 {
+            if !num1.is_empty() && num1.len() <= 3 && !num2.is_empty() && num2.len() <= 3 {
                 let a = num1.parse::<i64>().unwrap();
                 let b = num2.parse::<i64>().unwrap();
 

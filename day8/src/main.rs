@@ -16,9 +16,7 @@ fn main() {
             if c == '.' {
                 return;
             }
-            map.entry(c)
-                .or_insert(Vec::new())
-                .push((x as i32, y as i32));
+            map.entry(c).or_default().push((x as i32, y as i32));
         });
     });
 

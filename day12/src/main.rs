@@ -50,7 +50,7 @@ fn calc_perimeter(plants: &Vec<(usize, usize)>) -> usize {
 }
 
 // this is ugly:
-fn calc_sides(plants: &Vec<(usize, usize)>) -> usize {
+fn calc_sides(plants: &[(usize, usize)]) -> usize {
     let mut sides = 0;
 
     let min_x = plants.iter().min_by_key(|p| p.0).unwrap().0 as isize;

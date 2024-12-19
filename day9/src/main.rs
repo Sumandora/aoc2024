@@ -16,7 +16,7 @@ fn main() {
         .enumerate()
         .flat_map(|(idx, c)| {
             let mut vec = Vec::new();
-            let num = c as u8 - '0' as u8;
+            let num = c as u8 - b'0';
             let enabled = idx % 2 == 0;
             for _ in 0..num {
                 if enabled {
@@ -32,11 +32,11 @@ fn main() {
         })
         .collect::<Vec<_>>();
 
-    fn checksum(vec: &Vec<Option<u32>>) -> usize {
-        vec.into_iter()
+    fn checksum(vec: &[Option<u32>]) -> usize {
+        vec.iter()
             .enumerate()
             .map(|(idx, num)| {
-                if *num == None {
+                if num.is_none() {
                     0
                 } else {
                     idx * num.unwrap() as usize
@@ -47,8 +47,8 @@ fn main() {
 
     let mut part1 = line.clone();
     for (idx, c) in part1.clone().iter().enumerate() {
-        if *c == None {
-            let last_num = part1.iter().rposition(|c| *c != None).unwrap();
+        if c.is_none() {
+            let last_num = part1.iter().rposition(|c| c.is_some()).unwrap();
             if last_num > idx {
                 part1[idx] = part1[last_num];
                 part1[last_num] = None;
@@ -60,12 +60,12 @@ fn main() {
 
     println!("Part 1: {}", checksum(&part1));
 
-    fn find_space(line: &Vec<Option<u32>>, target_len: usize) -> Option<usize> {
+    fn find_space(line: &[Option<u32>], target_len: usize) -> Option<usize> {
         let mut idx = -1isize;
         let mut len = 0;
 
-        for i in 0..line.len() {
-            if line[i] == None {
+        for (i, c) in line.iter().enumerate() {
+            if c.is_none() {
                 if idx == -1 {
                     idx = i as isize;
                 }
@@ -79,13 +79,17 @@ fn main() {
             }
         }
 
-        return if idx != -1 { Some(idx as usize) } else { None };
+        if idx != -1 {
+            Some(idx as usize)
+        } else {
+            None
+        }
     }
-    fn find_block(line: &Vec<Option<u32>>, kind: u32) -> Option<(usize, usize)> {
+    fn find_block(line: &[Option<u32>], kind: u32) -> Option<(usize, usize)> {
         let mut idx = usize::MAX;
 
-        for i in 0..line.len() {
-            if line[i] != None && line[i].unwrap() == kind {
+        for (i, c) in line.iter().enumerate() {
+            if c.is_some() && c.unwrap() == kind {
                 if idx == usize::MAX {
                     idx = i;
                 }
@@ -97,7 +101,7 @@ fn main() {
             return Some((idx, line.len()));
         }
 
-        return None;
+        None
     }
 
     let mut part2 = line.clone();

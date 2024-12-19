@@ -21,7 +21,7 @@ fn recursively_spiral_out(
         return 1;
     }
 
-    return DIRECTIONS
+    DIRECTIONS
         .into_iter()
         .filter_map(|(dir_x, dir_y)| {
             let new_x = x as i32 + dir_x;
@@ -34,10 +34,8 @@ fn recursively_spiral_out(
                 return None;
             }
 
-            if respect_seen {
-                if seen.contains(&(new_x as usize, new_y as usize)) {
-                    return None;
-                }
+            if respect_seen && seen.contains(&(new_x as usize, new_y as usize)) {
+                return None;
             }
 
             Some(recursively_spiral_out(
@@ -49,7 +47,7 @@ fn recursively_spiral_out(
                 respect_seen,
             ))
         })
-        .sum();
+        .sum()
 }
 
 fn main() {
@@ -61,7 +59,7 @@ fn main() {
     input.lines().for_each(|line| {
         let mut line_vec = Vec::new();
         line.chars().for_each(|c| {
-            line_vec.push(c as u8 - '0' as u8);
+            line_vec.push(c as u8 - b'0');
         });
         grid.push(line_vec);
     });
@@ -82,9 +80,7 @@ fn main() {
                 })
                 .collect::<Vec<_>>()
         })
-        .fold((0, 0), |acc, (part1, part2)| {
-            return (acc.0 + part1, acc.1 + part2);
-        });
+        .fold((0, 0), |acc, (part1, part2)| (acc.0 + part1, acc.1 + part2));
 
     println!("Part 1: {}\nPart 2: {}", part1, part2);
 }

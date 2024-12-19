@@ -29,7 +29,7 @@ fn run_simulation(num: u64, depth: u64) -> usize {
     len
 }
 
-fn accumulate_len(nums: &Vec<u64>, depth: u64) -> usize {
+fn accumulate_len(nums: &[u64], depth: u64) -> usize {
     nums.iter()
         .map(|num| run_simulation(*num, depth))
         .sum::<usize>()
@@ -41,7 +41,7 @@ fn main() {
 
     let nums = input
         .lines()
-        .nth(0)
+        .next()
         .unwrap()
         .split(" ")
         .map(|str| str.parse::<u64>().unwrap())

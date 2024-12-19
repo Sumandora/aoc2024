@@ -49,6 +49,7 @@ fn main() {
         })
         .collect::<Vec<_>>();
 
+    #[allow(clippy::ptr_arg)]
     fn find_start(grid: &Vec<Vec<Cell>>) -> (i32, i32) {
         for (y, line) in grid.iter().enumerate() {
             for (x, c) in line.iter().enumerate() {
@@ -60,6 +61,7 @@ fn main() {
         panic!("no start");
     }
 
+    #[allow(clippy::ptr_arg)]
     fn find_end(grid: &Vec<Vec<Cell>>) -> (i32, i32) {
         for (y, line) in grid.iter().enumerate() {
             for (x, c) in line.iter().enumerate() {
