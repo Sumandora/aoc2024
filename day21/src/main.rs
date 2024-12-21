@@ -143,20 +143,27 @@ fn main() {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input).unwrap();
 
-    let part1 = input
+    let solutions = input
         .lines()
         .map(|str| (str, first_step(str)))
         .map(|(orig, str)| {
             (
                 orig,
                 str.iter()
+                    .map(|sol| second_step((*sol).clone(), 2))
+                    .min()
+                    .unwrap(),
+                str.iter()
                     .map(|sol| second_step((*sol).clone(), 25))
                     .min()
                     .unwrap(),
             )
         })
-        .map(|(orig, len)| len * orig.replace("A", "").parse::<u64>().unwrap())
-        .sum::<u64>();
+        .map(|(orig, len1, len2)| {
+            let c = orig[0..orig.len() - 1].parse::<u64>().unwrap();
+            (len1 * c, len2 * c)
+        })
+        .fold((0, 0), |acc, x| (acc.0 + x.0, acc.1 + x.1));
 
-    println!("Part 1: {part1}")
+    println!("Part 1: {}\nPart 2: {}", solutions.0, solutions.1);
 }
