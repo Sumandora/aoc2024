@@ -14,21 +14,16 @@ enum Opcode {
 fn compute(
     constants: &HashMap<String, bool>,
     gates: &Vec<(String, Opcode, String, String)>,
-) -> Option<Vec<bool>> {
+) -> Vec<bool> {
     fn dfs(
         constants: &HashMap<String, bool>,
         gates: &Vec<(String, Opcode, String, String)>,
         target: &String,
-        depth: usize,
     ) -> Option<bool> {
-        if depth > 100 {
-            // fail safe if two elements are swapped and a loop is created
-            return None;
-        }
         for gate in gates {
             if &gate.3 == target {
-                let a = dfs(constants, gates, &gate.0, depth + 1)?;
-                let b = dfs(constants, gates, &gate.2, depth + 1)?;
+                let a = dfs(constants, gates, &gate.0)?;
+                let b = dfs(constants, gates, &gate.2)?;
                 return Some(match gate.1 {
                     Opcode::Xor => a.bitxor(b),
                     Opcode::Or => a.bitor(b),
@@ -58,14 +53,14 @@ fn compute(
 
     for i in (0..=max).rev() {
         let out = format!("z{i:02}");
-        let var = dfs(constants, gates, &out, 0);
+        let var = dfs(constants, gates, &out);
         if let Some(var) = var {
             let b = var;
             bits.push(b);
         }
     }
 
-    Some(bits)
+    bits
 }
 
 fn main() {
@@ -95,12 +90,11 @@ fn main() {
             let var2 = it.next().unwrap();
             it.next().unwrap();
             let res = it.next().unwrap();
-
             (var1.to_owned(), op, var2.to_owned(), res.to_owned())
         })
         .collect::<Vec<_>>();
 
-    let z = compute(&constants, &gates).unwrap();
+    let z = compute(&constants, &gates);
 
     fn bools_to_number(bools: &[bool]) -> u64 {
         let mut number: u64 = 0;
@@ -112,4 +106,5 @@ fn main() {
 
     println!("Part 1: {}", bools_to_number(&z));
     // I can't think of an automatic solution to part 2...
+    // I provide a visualizer which makes it slightly easier to spot irregularities
 }
